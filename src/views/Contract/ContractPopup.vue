@@ -37,7 +37,7 @@
 
         <q-page-container>
           <q-page padding>
-            <contract></contract>
+            <contract @save-click="createContract"></contract>
 
             <q-page-scroller
               position="bottom-right"
@@ -56,13 +56,35 @@
 <script>
 import { ref } from 'vue'
 import Contract from './Contract.vue'
+import { RepositoryFactory } from '../../libs/HttpClient/RepositoryFactory'
+const ContractDetailRepository = RepositoryFactory.get('contracts')
 
 export default {
+  props: {
+    role: {
+      type: String,
+      required: true
+    }
+  },
   components: {
     Contract
   },
   setup (props) {
+    const createContract = async (contract) => {
+      const ctobj = {
+      }
+      ctobj.role = props.role
+      ctobj.name = contract.name
+      ctobj.payment = contract.payment
+      ctobj.amount = contract.amount
+
+      const { data } = await ContractDetailRepository.create(ctobj)
+      console.log(data)
+      return data
+    }
+
     return {
+      createContract,
       dialog: ref(true),
       maximizedToggle: ref(true)
     }

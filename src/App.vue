@@ -227,11 +227,36 @@
           <q-btn fab icon="keyboard_arrow_up" color="accent" />
         </q-page-scroller>
       </q-page>
-      <contract-popup
+      <!-- <contract-popup
         v-if="isShow"
         @close-modal="isShow = false"
-      ></contract-popup>
+      ></contract-popup> -->
     </q-page-container>
+    <div>
+    <q-dialog v-model="isShow">
+      <q-card>
+        <q-card-section>
+          <div class="text-h6">YOU ARE </div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Perferendis laudantium minus earum totam modi laborum illo, corporis fuga saepe animi aliquam ea enim assumenda ut nulla natus aperiam quis. Iste.
+        </q-card-section>
+
+        <q-card-actions align="right" class="text-primary">
+          <q-btn flat label="Seller" @click="btnSeller"
+              color="primary"
+              rounded
+              size="lg"/>
+          <q-btn flat label="Buyer" @click="btnBuyer"
+              color="primary"
+              rounded
+              size="lg"/>
+        </q-card-actions>
+      </q-card>
+      </q-dialog>
+      <contract-popup v-if="secondDialog" persistent transition-show="scale" transition-hide="scale" @close-modal="secondDialog = false" :role="role"></contract-popup>
+    </div>
   </q-layout>
 </template>
 
@@ -245,12 +270,12 @@ const offline = [{
   email: '200',
   avatar: 'avatar2.jpg'
 }]
-
 export default {
   name: 'GoogleNewsLayout',
   components: { ContractPopup },
   setup () {
     const isShow = ref(false)
+    const secondDialog = ref(false)
     const leftDrawerOpen = ref(false)
     const search = ref('')
     const showAdvanced = ref(false)
@@ -260,6 +285,8 @@ export default {
     const excludeWords = ref('')
     const byWebsite = ref('')
     const byDate = ref('Any time')
+    const role = ref('seller')
+
     function onClear () {
       exactPhrase.value = ''
       hasWords.value = ''
@@ -267,12 +294,23 @@ export default {
       byWebsite.value = ''
       byDate.value = 'Any time'
     }
+
     function changeDate (option) {
       byDate.value = option
       showDateOptions.value = false
     }
+
     function toggleLeftDrawer () {
       leftDrawerOpen.value = !leftDrawerOpen.value
+    }
+
+    const btnSeller = () => {
+      secondDialog.value = true
+      role.value = 'seller'
+    }
+    const btnBuyer = () => {
+      secondDialog.value = true
+      role.value = 'buyer'
     }
     return {
       offline,
@@ -286,6 +324,8 @@ export default {
       byWebsite,
       byDate,
       isShow,
+      secondDialog,
+      role,
       links1: [
         { icon: 'mail', text: 'Mail Box', to: 'mail-box' },
         { icon: 'note_add', text: 'Contract draft', to: 'contract-draft' },
@@ -303,7 +343,9 @@ export default {
       ],
       onClear,
       changeDate,
-      toggleLeftDrawer
+      toggleLeftDrawer,
+      btnSeller,
+      btnBuyer
     }
   }
 }

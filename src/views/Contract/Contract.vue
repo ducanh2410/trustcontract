@@ -13,7 +13,7 @@
         </div>
       </div>
       <div>
-        <q-btn color="green" text-color="white" label="Save" no-caps />
+        <q-btn color="green" text-color="white" label="Save" @click="$emit('save-click', { name: contractName, payment: 123456, amount: totalMoney})" no-caps />
         <q-btn color="white" text-color="black" label="Edit" class="q-ml-sm" no-caps />
         <q-btn
           color="primary"
@@ -34,7 +34,14 @@
     </div>
     <q-separator inset class="q-my-sm" />
     <div class="row justify-center">
-      <span class="title">Hợp đồng mua bán xxx</span>
+      <span class="title">
+      <div class="q-pa-md">
+    <div class="q-gutter-md" style="max-width: 300px">
+      <q-input v-model="contractName" label="Hợp đồng mua bán" />
+    </div>
+  </div>
+
+      </span>
     </div>
     <div class="row justify-around q-mt-sm">
       <div>
@@ -94,6 +101,11 @@
       <div>
         <div class="title-dk">
           Điều 2: Yêu cầu chất lượng
+            <q-btn color="white" text-color="black" label="Standard" no-caps @click="Them" />
+
+            <div v-for="(item, i) in mang" :key="i">
+              <q-input v-model="item.content" label="Standard" />
+            </div>
         </div>
       </div>
       <div>
@@ -307,13 +319,27 @@ const rows = [
 
 export default {
   setup () {
+    const mang = ref([])
+    const Them = () => {
+      var newMang = []
+      mang.value.push({ content: '' })
+      mang.value.forEach(item => {
+        newMang.push(item.content)
+      })
+      console.log('value', mang)
+      console.log('raw', mang.value)
+      console.log('mang', newMang.join('|'))
+    }
     return {
       alert: ref(false),
       model: ref('Bank'),
       text: ref(''),
+      contractName: ref(''),
+      mang,
       options: ['Google', 'Facebook', 'Twitter', 'Apple', 'Oracle'],
       columns,
-      rows
+      rows,
+      Them
     }
   },
 
