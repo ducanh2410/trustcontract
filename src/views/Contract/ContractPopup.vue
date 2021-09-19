@@ -70,23 +70,19 @@ export default {
     Contract
   },
   setup (props) {
-    const createContract = async (contract) => {
-      const ctobj = {
-      }
-      ctobj.role = props.role
-      ctobj.name = contract.name
-      ctobj.payment = contract.payment
-      ctobj.amount = contract.amount
+    const dialog = ref(true)
+    const maximizedToggle = ref(true)
 
-      const { data } = await ContractDetailRepository.create(ctobj)
-      console.log(data)
+    const createContract = async (contract) => {
+      contract.role = props.role
+      const { data } = await ContractDetailRepository.create(contract)
       return data
     }
 
     return {
       createContract,
-      dialog: ref(true),
-      maximizedToggle: ref(true)
+      dialog,
+      maximizedToggle
     }
   }
 }
